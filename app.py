@@ -2,12 +2,8 @@
 import streamlit as st
 import mido
 import numpy as np
-import pygame
 import os
 from mido import MidiFile, MidiTrack, Message
-
-# Initialize pygame mixer for audio playback
-pygame.mixer.init()
 
 # Function to generate distinct MIDI melodies based on mood
 def generate_music(mood, tempo, duration=12):
@@ -149,7 +145,7 @@ st.markdown("""
 
 # Streamlit app layout
 st.title("Music Mood Generator")
-st.write("Pick a mood and tempo to create your own melody!")
+st.write("Pick a mood and tempo to create your own melody! Download the MIDI file to listen.")
 
 # User inputs
 mood = st.selectbox("Choose a Mood", ["Happy", "Sad", "Calm", "Energetic", "Mysterious"])
@@ -161,14 +157,10 @@ if st.button("Generate Music"):
         # Generate the MIDI file
         midi_file = generate_music(mood, tempo)
         
-        # Play the music locally (pygame)
-        pygame.mixer.music.load(midi_file)
-        pygame.mixer.music.play()
-        
-        # Inform user and provide download
-        st.write("Music is playing! Check your system audio.")
+        # Provide download link
         with open(midi_file, "rb") as f:
             st.download_button("Download Your Melody (MIDI)", f, file_name="my_melody.mid")
+        st.write("MIDI file generated! Download and play it using a media player like VLC or a DAW.")
 
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
